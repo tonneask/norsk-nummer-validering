@@ -1,3 +1,64 @@
-<h1>Validering</h1>
+<h1>Test av numre</h1>
 
-<input placeholder="Skriv et nummer..." >
+<style>
+    section {
+        border: 1px solid gray;
+        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<section>
+    <h2>Fødselsnummer</h2>
+    
+    <input 
+        placeholder="Skriv et fødselsnummer..." 
+        id="fnr-input" 
+        type="number"
+    >
+    
+    <h5>Valideringsoutput</h5>
+    <pre id="fnr-output">{}</pre>
+    
+    <script src="navikt-fnrvalidator.js"></script>
+
+    <script>
+        function on_fnr_change(evt) {
+            const validationResult = idnr(evt.target.value);
+            const kontrollSifre = calculateLastTwo(evt.target.value)
+            document.querySelector("#fnr-output").textContent = JSON.stringify({ kontrollSifre, validationResult}, null, 4);
+        }
+
+        document.querySelector("#fnr-input")
+            .addEventListener('input', on_fnr_change);
+    </script>
+</section>
+
+
+<section>
+    <h2>DUF-nummer</h2>
+    
+    <script src="dufnummer.js"></script>
+
+    <input 
+        placeholder="Skriv et DUF-nummer..." 
+        id="dufnr-input" 
+        type="number"
+    >
+    
+    <h5>Valideringsoutput</h5>
+    <pre id="dufnr-output">{}</pre>
+    
+
+    <script>
+        function on_dufnr_change(evt) {
+            const erGyldig = erGyldigDufNummer(evt.target.value);
+            const kontrollSifre = regnUtSjekksiffer((evt.target.value || "").substr(0, 10));
+            document.querySelector("#dufnr-output").textContent = JSON.stringify({ kontrollSifre, erGyldig}, null, 4);
+        }
+
+        document.querySelector("#dufnr-input")
+            .addEventListener('input', on_dufnr_change);
+    </script>
+</section>
