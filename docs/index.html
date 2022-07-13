@@ -11,6 +11,13 @@
         vertical-align: top;
     }
 </style>
+<script>
+    function numbersFromInputEvent(event) {
+        const value = event.target.value || "";
+        const replacedValue = value.replaceAll(/[^\d]/g, "");
+        return replacedValue;
+    }
+</script>
 
 <section>
     <h2>Fødselsnummer</h2>
@@ -28,8 +35,9 @@
 
     <script>
         function on_fnr_change(evt) {
-            const validationResult = idnr(evt.target.value);
-            const kontrollSifre = calculateLastTwo(evt.target.value)
+            const stringOfNumbers = numbersFromInputEvent(evt);
+            const validationResult = idnr(stringOfNumbers);
+            const kontrollSifre = calculateLastTwo(stringOfNumbers);
             document.querySelector("#fnr-output").textContent = JSON.stringify({ kontrollSifre, validationResult}, null, 4);
         }
 
@@ -47,7 +55,7 @@
     <input 
         placeholder="Skriv et nummer..." 
         id="kidnummer-input" 
-        type="number"
+        type="text"
     >
     
     <h5>Valideringsoutput</h5>
@@ -55,7 +63,9 @@
     
     <script>
         function on_kidnummer_change(evt) {
-            const result = gyldigKIDnummerRapport(evt.target.value)
+            const stringOfNumbers = numbersFromInputEvent(evt);
+            const result = checkAllTheThings(stringOfNumbers);
+
             document.querySelector("#kidnummer-output").textContent = JSON.stringify({ result }, null, 4);
         }
 
@@ -78,7 +88,8 @@
     
     <script>
         function on_kontonr_change(evt) {
-            const result = gyldigKontonummerRapport(evt.target.value)
+            const stringOfNumbers = numbersFromInputEvent(evt);
+            const result = checkAllTheThings(stringOfNumbers);
             document.querySelector("#kontonr-output").textContent = JSON.stringify({ result }, null, 4);
         }
 
@@ -104,8 +115,10 @@
 
     <script>
         function on_dufnr_change(evt) {
-            const erGyldig = erGyldigDufNummer(evt.target.value);
-            const kontrollSifre = regnUtSjekksiffer((evt.target.value || "").substr(0, 10));
+            const stringOfNumbers = numbersFromInputEvent(evt);
+            const erGyldig = erGyldigDufNummer(stringOfNumbers);
+            const kontrollSifre = regnUtSjekksiffer(stringOfNumbers.substr(0, 10));
+
             document.querySelector("#dufnr-output").textContent = JSON.stringify({ kontrollSifre, erGyldig}, null, 4);
         }
 

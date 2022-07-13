@@ -1,14 +1,12 @@
-const weightSequence = [2, 3, 4, 5, 6, 7];
-
-// Array of 5 weightSequences - because that is the precise number of sequences Norwegian numbers will ever need.
-const weights = new Array(5).fill(1).reduce(p => p.concat(weightSequence), []);
-
 function calculateMod11Digit(stringOfNumbers) {
+    const weightSequence = [2, 3, 4, 5, 6, 7];
+    
     const digits = stringOfNumbers.split('').map(s => parseInt(s, 10));
 
     const sumProduct = digits.reverse()
         .reduce((previous, current, index) => {
-            return previous + current * weights[index];
+            const weight = weightSequence[index % 6];
+            return previous + current * weight;
         }, 0);
 
     const possiblyCheckDigit = 11 - (sumProduct % 11);
@@ -22,34 +20,6 @@ function calculateMod11Digit(stringOfNumbers) {
     }
 
     return String(possiblyCheckDigit);
-}
-
-function gyldigKontonummerRapport(stringOfNumbers) {
-    const result = {
-        lengde: false,
-        checksum: false,
-        checkDigit: ''
-    };
-
-    // if (!stringOfNumbers || 
-    //     stringOfNumbers.length !== 11 ||
-    //     !/\d{11}/.test(stringOfNumbers)
-    // ) {
-    //     return result;
-    // }
-
-    result.lengde = stringOfNumbers.length === 11;
-
-    const firstTenNumbersInString = stringOfNumbers.substr(0, 10);
-
-    const checkDigit = calculateMod11Digit(firstTenNumbersInString);
-    
-    result.checkDigit = checkDigit;
-
-    result.checksum = (stringOfNumbers === (firstTenNumbersInString + checkDigit));
-
-
-    return result;
 }
 
 function calculateLuhnDigit(stringOfNumbers) {
@@ -77,29 +47,38 @@ function calculateLuhnDigit(stringOfNumbers) {
     return 10 - remainder;
 }
 
-function gyldigKIDnummerRapport(stringOfNumbers) {
-    const result = {
-        lengde: 0,
-        mod10DigitAll: '',
-        mod11DigitAll: '',
-        mod10Digit: '',
-        mod11Digit: '',
-        isMod10: false,
-        isMod11: false
-    };
-
-    result.lengde = stringOfNumbers.length;
+function checkAllTheThings(stringOfNumbers) {
+    const input = stringOfNumbers;
+    const length = stringOfNumbers.length;        
 
     const firstPart = stringOfNumbers.substr(0, stringOfNumbers.length - 1);
+    const mod10Digit = calculateLuhnDigit(firstPart);
+    const mod11Digit = calculateMod11Digit(firstPart);
 
-    result.mod10DigitAll = calculateLuhnDigit(stringOfNumbers);
-    result.mod11DigitAll = calculateMod11Digit(stringOfNumbers);
+    const addedMod10Digit = calculateLuhnDigit(stringOfNumbers);
+    const addedMod11Digit = calculateMod11Digit(stringOfNumbers);
 
-    result.mod10Digit = calculateLuhnDigit(firstPart);
-    result.mod11Digit = calculateMod11Digit(firstPart);
+    const validMod10 = stringOfNumbers === (firstPart + mod10Digit);
+    const validMod11 = stringOfNumbers === (firstPart + mod11Digit);
 
-    result.isMod10 = (stringOfNumbers === (firstPart + result.mod10Digit));
-    result.isMod11 = (stringOfNumbers === (firstPart + result.mod11Digit));
+    const gyldigKontoNummer = length === 11 && validMod11;
+    const gyldigKIDNummer = (length > 1 && length < 26) &&
+        (validMod10 || validMod11);
+
+    const result = {
+        input,
+        length,
+        firstPart,
+        mod10Digit,
+        mod11Digit,
+        addedMod10Digit,
+        addedMod11Digit,
+        validMod10,
+        validMod11,
+        gyldigKontoNummer,
+        gyldigKIDNummer
+    };
 
     return result;
 }
+

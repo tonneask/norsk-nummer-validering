@@ -18,15 +18,6 @@ function leggTilSjekksiffer(tiTallsStreng) {
 }
 
 function regnUtSjekksiffer(tiTallsStreng) {
-    // Return early if not a string of 10 digits
-    if (!tiTallsStreng || 
-        !tiTallsStreng.length === 10 ||
-        !/\d{10}/.test(tiTallsStreng)
-        ) 
-    {
-        return "??";
-    }
-
     const tenFirstDigits = tiTallsStreng.split('').map(s => parseInt(s, 10));
     
     const kontrollSiffer = mod11DigitDuf(tenFirstDigits);
@@ -37,12 +28,7 @@ function regnUtSjekksiffer(tiTallsStreng) {
 }
 
 function erGyldigDufNummer(tolvTallStreng) {
-    // Return early if not a string of 12 digits
-    if (!tolvTallStreng ||
-        tolvTallStreng.length !== 12 ||
-        !/\d{12}/.test(tolvTallStreng)    
-        ) 
-    {
+    if (tolvTallStreng.length !== 12) {
         return false;
     }
 
