@@ -50,7 +50,5 @@ function erGyldigDufNummer(tolvTallStreng) {
 
     const sjekkSifreStreng = regnUtSjekksiffer(tiTallsStreng);
 
-    console.log({tiTallsStreng, sjekkSifreStreng, tolvTallStreng})
-
     return tolvTallStreng === (tiTallsStreng + sjekkSifreStreng);
 }

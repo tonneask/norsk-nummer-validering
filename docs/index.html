@@ -35,6 +35,53 @@
     </script>
 </section>
 
+<script src="mod1011.js"></script>
+
+<section>
+    <h2>KID-nummer (/Luhn/Mod10/Mod11/Kontonummer)</h2>
+    
+    <input 
+        placeholder="Skriv et nummer..." 
+        id="kidnummer-input" 
+        type="number"
+    >
+    
+    <h5>Valideringsoutput</h5>
+    <pre id="kidnummer-output">{}</pre>
+    
+    <script>
+        function on_kidnummer_change(evt) {
+            const result = gyldigKIDnummerRapport(evt.target.value)
+            document.querySelector("#kidnummer-output").textContent = JSON.stringify({ result }, null, 4);
+        }
+
+        document.querySelector("#kidnummer-input")
+            .addEventListener('input', on_kidnummer_change);
+    </script>
+</section>
+
+<section>
+    <h2>Kontonummer</h2>
+    
+    <input 
+        placeholder="Skriv et kontonummer..." 
+        id="kontonr-input" 
+        type="number"
+    >
+    
+    <h5>Valideringsoutput</h5>
+    <pre id="kontonr-output">{}</pre>
+    
+    <script>
+        function on_kontonr_change(evt) {
+            const result = gyldigKontonummerRapport(evt.target.value)
+            document.querySelector("#kontonr-output").textContent = JSON.stringify({ result }, null, 4);
+        }
+
+        document.querySelector("#kontonr-input")
+            .addEventListener('input', on_kontonr_change);
+    </script>
+</section>
 
 <section>
     <h2>DUF-nummer</h2>
@@ -62,3 +109,6 @@
             .addEventListener('input', on_dufnr_change);
     </script>
 </section>
+
+
+
